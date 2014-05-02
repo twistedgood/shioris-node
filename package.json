@@ -1,9 +1,10 @@
 {
-  "name": "application-name",
+  "name": "Shioris",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha"
   },
   "dependencies": {
     "express": "~4.0.0",
@@ -13,5 +14,10 @@
     "body-parser": "~1.0.0",
     "debug": "~0.7.4",
     "jade": "~1.3.0"
+  },
+  "devDependencies": {
+    "node-dev": "^2.3.0",
+    "mocha": "^1.18.2",
+    "supertest": "^0.12.0"
   }
 }
