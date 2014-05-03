@@ -4,6 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -55,5 +56,17 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// helper
+app.locals.dateformat = require('dateformat');
+
+// connect mongodb
+console.log('env:' + app.get('env'));
+if (app.get('env' === 'test')) {
+  app.set('mongodb', 'shioris');
+} else {
+  app.set('mongodb', 'shioris-test');
+}
+
+mongoose.connect('mongodb://localhost/' + app.get('mongodb'));
 
 module.exports = app;
