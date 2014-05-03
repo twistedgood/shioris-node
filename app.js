@@ -4,6 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('cookie-session');
 var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
@@ -22,7 +23,19 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({ secret: 'shioris', cookie: { maxAge: 60000 } }));
+
 app.use('/', routes);
+
+// auth
+app.use(function(req, res, next) {
+    if (req.session.user) {
+      next();
+    } else {
+      res.redirect('/login');
+    }
+});
+
 app.use('/users', users);
 
 /// catch 404 and forwarding to error handler
