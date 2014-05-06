@@ -1,7 +1,25 @@
 doctype html
 html
+  block link
+    -var selected = 'home';
+
+  -var menu = { home: '/', users: '/users', bookmarks: '/bookmarks' };
+
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    if loginUser
+      p login: #{loginUser}  
+      a(href='/logout', title=key)= 'logout'
+    
+      nav
+        ul
+          each val, key in menu
+            li
+              if selected === key
+                a.selected(href=val, title=key)= key
+              else
+                a(href=val, title=key)= key
+
     block content

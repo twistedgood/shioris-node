@@ -21,6 +21,7 @@ block content
       td created_at
     each user in users
       tr
-        td #{user.id}
+        td
+          a(href='/bookmarks/#{user.id}') #{user.id}
         td #{user.name}
         td #{dateformat(user.created_at, 'yyyy-mm-dd hh:MM:ss')}

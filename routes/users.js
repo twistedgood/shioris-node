@@ -22,7 +22,7 @@ router.post('/', function(req, res) {
        id: req.param('id')
      , name: req.param('name')
     }, function(err) {
-      res.redirect('back');
+      res.redirect('/users');
     });
   });
 });

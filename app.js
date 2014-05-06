@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var bookmarks = require('./routes/bookmarks');
 
 var app = express();
 
@@ -23,13 +24,15 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({ secret: 'shioris', cookie: { maxAge: 60000 } }));
+app.use(session({ secret: 'shioris' }));
 
 app.use('/', routes);
 
 // auth
 app.use(function(req, res, next) {
     if (req.session.user) {
+      console.log('session user:' + req.session.user.id);
+      res.locals.loginUser = req.session.user.id;
       next();
     } else {
       res.redirect('/login');
@@ -37,6 +40,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/users', users);
+app.use('/bookmarks', bookmarks);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
@@ -73,11 +77,13 @@ app.use(function(err, req, res, next) {
 app.locals.dateformat = require('dateformat');
 
 // connect mongodb
-console.log('env:' + app.get('env'));
-if (app.get('env' === 'test')) {
-  app.set('mongodb', 'shioris');
-} else {
+console.log('env:[' + app.get('env') + ']');
+if (app.get('env') === 'test') {
   app.set('mongodb', 'shioris-test');
+  console.log('db :set test');
+} else {
+  app.set('mongodb', 'shioris');
+  console.log('db :set dev');
 }
 
 mongoose.connect('mongodb://localhost/' + app.get('mongodb'));
