@@ -6,7 +6,6 @@ block content
     each error in errors
       li #{error}
   h1 Login
-    form(action='/login', method='post')
-      input(type='text', name='id', placeholder='id')
-      br
-      input(type='submit', value='Login')
+  form(action='/login', method='post').pure-form
+    input(type='text', name='id', placeholder='ID')
+    input(type='submit', value='Login').pure-button

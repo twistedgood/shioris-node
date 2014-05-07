@@ -6,22 +6,22 @@ block content
     each error in errors
       li #{error}
   h1 Add User
-    form(action='/users', method='post')
-      input(type='text', name='id', placeholder='id')
-      br
-      input(type='text', name='name', placeholder='name')
-      br
-      input(type='submit', value='Register')
+  form(action='/users', method='post').pure-form.pure-form-stacked
+    input(type='text', name='id', placeholder='ID')
+    input(type='text', name='name', placeholder='Name')
+    input(type='submit', value='Register').pure-button
   h1 User Listing
   p #{users.length} user(s)
-  table
-    tr
-      td id
-      td name
-      td created_at
-    each user in users
+  table.pure-table
+    thead
       tr
-        td
-          a(href='/bookmarks/#{user.id}') #{user.id}
-        td #{user.name}
-        td #{dateformat(user.created_at, 'yyyy-mm-dd hh:MM:ss')}
+        td id
+        td name
+        td created_at
+    each user in users
+      tbody
+        tr
+          td
+            a(href='/bookmarks/#{user.id}') #{user.id}
+          td #{user.name}
+          td #{dateformat(user.created_at, 'yyyy-mm-dd hh:MM:ss')}

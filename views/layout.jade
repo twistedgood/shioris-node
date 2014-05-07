@@ -3,23 +3,24 @@ html
   block link
     -var selected = 'home';
 
-  -var menu = { home: '/', users: '/users', bookmarks: '/bookmarks' };
+  -var menu = { home: '/', bookmarks: '/bookmarks', users: '/users' };
+  if loginUser
+    - menu.logout = '/logout';
+  else
+    - menu.login = '/login';
 
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='//yui.yahooapis.com/pure/0.4.2/pure-min.css')
   body
-    if loginUser
-      p login: #{loginUser}  
-      a(href='/logout', title=key)= 'logout'
-    
-      nav
-        ul
-          each val, key in menu
-            li
-              if selected === key
-                a.selected(href=val, title=key)= key
-              else
-                a(href=val, title=key)= key
+    nav.pure-menu.pure-menu-open.pure-menu-horizontal
+      ul
+        each val, key in menu
+          li
+            if selected === key
+              a.selected(href=val, title=key)= key
+            else
+              a(href=val, title=key)= key
 
     block content

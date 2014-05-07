@@ -63,9 +63,20 @@ describe('bookmark test', function() {
     it('should add a bookmark', function(done) {
       var req = request(app).post('/bookmarks');
       req.cookies = Cookies;
-      req.send({ url: 'http://test/', name: 'hoge' })
+      req.send({ url: 'http://www.example.com/', name: 'hoge' })
       .expect(302)
       .expect(/Redirecting to \/bookmarks/)
+      .end(done); 
+    });
+  });
+
+  describe('POST /bookmarks', function() {
+    it('should error', function(done) {
+      var req = request(app).post('/bookmarks');
+      req.cookies = Cookies;
+      req.send({ url: 'http://www.example.com/', name: 'hoge' })
+      .expect(200)
+      .expect(/Already Registered/)
       .end(done); 
     });
   });
