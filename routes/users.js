@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+var Q = require('q');
 var User = require('../models/User').User;
 
 router.get('/', function(req, res) {
@@ -8,23 +9,31 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-  User.findOne({ id: req.param('id') }, function(err, user) {
-    if (err) {
-      res.send('error: ' + err);
-      return;
-    }
+  Q.nmcall(User, 'findOne', {id: req.param('id') })
+  .then(function(user) {
+    var deferred = Q.defer();
     if (user) {
-      res.locals.errors = ['Duplicated id. Please enter other.'];
-      renderList(req, res);
-      return;
+      deferred.reject('Duplicated id. Please enter other.');
+    } else {
+      deferred.resolve();
     }
-    User.create({
-       id: req.param('id')
-     , name: req.param('name')
-    }, function(err) {
-      res.redirect('/users');
+    return deferred.promise;
+  })
+  .then(function() {
+    Q.nmcall(User, 'create', {
+      id: req.param('id'),
+      password: req.param('password')
     });
-  });
+  })
+  .then(function() {
+    res.redirect('/users');
+  })
+  .catch(function(error) {
+    res.locals.errors = [error];
+    renderList(req, res);
+    return;
+  })
+  .done();
 });
 
 var renderList = function(req, res) {

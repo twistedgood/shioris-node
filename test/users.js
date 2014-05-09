@@ -6,15 +6,16 @@ var User = require('../models/User').User;
 
 var Cookies;
 
-describe('bookmark test', function() {
+describe('user test', function() {
   before(function(done) {
     User.remove({}, function() {
       User.create({
-        id: 'testuser'
+        id: 'testuser',
+        password: 'testpswd'
       }, function() {
         request(app)
         .post('/login')
-        .send({ id: 'testuser' })
+        .send({ id: 'testuser', password: 'testpswd' })
         .expect(200)
         .end(function(err, res) {
           Cookies = res.headers['set-cookie'].map(function(r){

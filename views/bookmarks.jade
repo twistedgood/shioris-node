@@ -13,9 +13,13 @@ block content
     input(type='text', name='url', size='80', placeholder='URL')
     input(type='submit', value='Shiori').pure-button
   h1 Shiori Listing
+  form(action='/bookmarks', method='get').pure-form
+    input(type='text', name='q', size='80', placeholder='')
+    input(type='submit', value='Search').pure-button
   p #{bookmarks.length} bookmark(s)
   if(bookmarks.length > 0)
   ul
     each bookmark in bookmarks
       li
-        a(href='#{bookmark.url}', target='_blank') #{bookmark.title}
+        a(href='#{bookmark.url}', target='_blank') #{bookmark.title} - #{bookmark.url}
+        p #{bookmark.content.replace(/ +/, ' ').substring(0, 200)}

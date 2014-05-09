@@ -4,10 +4,12 @@ var router = express.Router();
 var Bookmark = require('../models/Bookmark').Bookmark;
 var Q = require('q');
 var request = require('request');
-var jsdom = require('jsdom');
+var cheerio = require('cheerio');
+var jschardet = require('jschardet');
+var Iconv = require('iconv').Iconv;
 
 var renderList = function(req, res, param) {
-  Bookmark.find(param, function(err, bookmarks) {
+  Bookmark.find(param).sort('created_at').exec(function(err, bookmarks) {
     res.render('bookmarks', {
       bookmarks: bookmarks
     });
@@ -15,7 +17,19 @@ var renderList = function(req, res, param) {
 }
 
 router.get('/', function(req, res) {
-  renderList(req, res, { user: req.session.user.id });
+  var query = Bookmark.find({ user: req.session.user.id });
+  if (req.param('q')) {
+    var q = req.param('q').split(' ');
+    for (var i in q) {
+      console.log('#q:' + q[i]);
+      query.where({ content: new RegExp(q[i], 'i') });
+    }
+  }
+  query.exec(function(err, bookmarks) {
+    res.render('bookmarks', {
+      bookmarks: bookmarks
+    });
+  });
 });
 
 router.get('/:user', function(req, res) {
@@ -27,7 +41,10 @@ router.get('/:user', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-  Q.nmcall(Bookmark, 'findOne', { url: req.param('url') })
+  Q.nmcall(Bookmark, 'findOne', {
+    url: req.param('url'),
+    user: req.session.user.id
+  })
   .then(function(bookmark) {
     var deferred = Q.defer();
     if (bookmark) {
@@ -38,27 +55,21 @@ router.post('/', function(req, res) {
     return deferred.promise;
   })
   .then(function() {
-    return Q.nmcall(request, 'get', req.param('url'));
-  })
-  .then(function(response) {
-    var deferred = Q.defer();
-    jsdom.env({
-      html: response[1],
-      done: function(err, window) {
-        if (err) {
-          deferred.reject(err);
-        } else {
-          deferred.resolve(window);
-        }
-      }
-    });
-    return deferred.promise;
-  })
-  .then(function(window) {
-    return Q.nmcall(Bookmark, 'create', {
+    return Q.nmcall(request, 'get', {
       url: req.param('url'),
-      title: window.document.title,
-      content: '',
+      encoding: 'binary'
+    });
+  })
+  .then(function(responseArray) {
+    var response = responseArray[0];
+    var body = responseArray[1];
+    body = convert(new Buffer(body, 'binary'));
+    var $ = cheerio.load(body);
+    var title = $("title").text();
+    return Q.nmcall(Bookmark, 'create', {
+      url: response.request.uri.href,
+      title: title,
+      content: $.root().text().replace(/<|>/g, ''),
       user: req.session.user.id
     })
   })
@@ -71,5 +82,13 @@ router.post('/', function(req, res) {
   })
   .done();
 });
+
+var convert = function(text) {
+  var detected = jschardet.detect(text);
+  console.log('#detected:' + detected.encoding);
+  var iconv = new Iconv(detected.encoding,'UTF-8//TRANSLIT//IGNORE');
+  text = iconv.convert(text).toString();
+  return text;
+}
 
 module.exports = router;

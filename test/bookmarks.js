@@ -36,6 +36,8 @@ describe('bookmark test', function() {
     .then(function() {
       return Q.nmcall(Bookmark, 'create', { 
         url: 'http://localhost/test',
+        title: 'title',
+        content: 'content',
         user: 'testuser'
       });
     })

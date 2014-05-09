@@ -8,7 +8,7 @@ block content
   h1 Add User
   form(action='/users', method='post').pure-form.pure-form-stacked
     input(type='text', name='id', placeholder='ID')
-    input(type='text', name='name', placeholder='Name')
+    input(type='text', name='password', placeholder='Password')
     input(type='submit', value='Register').pure-button
   h1 User Listing
   p #{users.length} user(s)
@@ -16,12 +16,12 @@ block content
     thead
       tr
         td id
-        td name
+        td password
         td created_at
     each user in users
       tbody
         tr
           td
             a(href='/bookmarks/#{user.id}') #{user.id}
-          td #{user.name}
+          td ******
           td #{dateformat(user.created_at, 'yyyy-mm-dd hh:MM:ss')}

@@ -19,7 +19,9 @@
     "cookie-session": "^1.0.1",
     "superagent": "^0.18.0",
     "q": "^1.0.1",
-    "jsdom": "^0.10.5"
+    "jschardet": "^1.1.0",
+    "iconv": "^2.1.0",
+    "cheerio": "^0.15.0"
   },
   "devDependencies": {
     "node-dev": "^2.3.0",
