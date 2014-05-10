@@ -44,7 +44,7 @@ describe('user test', function() {
       req.cookies = Cookies;
       req.send({ id: 'hoge', name: 'hoge' })
       .expect(302)
-      .expect(/Redirecting to \/users/)
+      .expect(/Redirecting to users/)
       .end(done); 
     });
   });

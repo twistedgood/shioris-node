@@ -67,7 +67,7 @@ describe('bookmark test', function() {
       req.cookies = Cookies;
       req.send({ url: 'http://www.example.com/', name: 'hoge' })
       .expect(302)
-      .expect(/Redirecting to \/bookmarks/)
+      .expect(/Redirecting to bookmarks/)
       .end(done); 
     });
   });
