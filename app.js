@@ -32,7 +32,9 @@ app.use('/', routes);
 app.use(function(req, res, next) {
     if (req.session.user) {
       console.log('session user:' + req.session.user.id);
+      res.locals.isLogin = true;
       res.locals.loginUser = req.session.user.id;
+      res.locals.isAdmin = (req.session.user.id === 'admin');
       next();
     } else {
       res.redirect('/login');
@@ -74,6 +76,7 @@ app.use(function(err, req, res, next) {
 });
 
 // helper
+app.locals.title = "Shioris";
 app.locals.dateformat = require('dateformat');
 
 // connect mongodb

@@ -4,14 +4,14 @@ block link
   -var selected = 'bookmarks';
 
 block content
-  if errors
-    ul
-    each error in errors
-      li #{error}
   h1 New Shiori
   form(action='/bookmarks', method='post').pure-form
     input(type='text', name='url', size='80', placeholder='URL')
     input(type='submit', value='Shiori').pure-button
+  if errors
+    ul
+    each error in errors
+      li.alert-error #{error}
   h1 Shiori Listing
   form(action='/bookmarks', method='get').pure-form
     input(type='text', name='q', size='80', placeholder='')
@@ -21,5 +21,8 @@ block content
   ul
     each bookmark in bookmarks
       li
-        a(href='#{bookmark.url}', target='_blank') #{bookmark.title} - #{bookmark.url}
-        p #{bookmark.content.replace(/ +/, ' ').substring(0, 200)}
+        a(href='#{bookmark.url}', target='_blank') #{bookmark.title}
+        div
+          img(src='#{"http://www.google.com/s2/favicons?domain_url=" + bookmark.url}')
+          span #{bookmark.url}
+          //div #{bookmark.content.replace(/ +/, ' ').substring(0, 200)}

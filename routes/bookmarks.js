@@ -25,6 +25,7 @@ router.get('/', function(req, res) {
       query.where({ content: new RegExp(q[i], 'i') });
     }
   }
+  query.sort('created_at');
   query.exec(function(err, bookmarks) {
     res.render('bookmarks', {
       bookmarks: bookmarks

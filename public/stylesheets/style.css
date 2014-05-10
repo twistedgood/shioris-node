@@ -1,8 +1,8 @@
 body {
-  padding: 50px;
+  padding: 10px 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+.alert-error {
+  color: rgb(202, 60, 60); /* this is a maroon */
 }

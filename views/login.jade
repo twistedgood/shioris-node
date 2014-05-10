@@ -1,12 +1,12 @@
 extends layout
 
 block content
-  if errors
-    ul
-    each error in errors
-      li #{error}
   h1 Login
   form(action='/login', method='post').pure-form.pure-form-stacked
     input(type='text', name='id', placeholder='ID')
     input(type='text', name='password', placeholder='Password')
     input(type='submit', value='Login').pure-button
+  if errors
+    ul
+    each error in errors
+      li.alert-error #{error}
