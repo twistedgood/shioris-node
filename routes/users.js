@@ -26,7 +26,7 @@ router.post('/', function(req, res) {
     });
   })
   .then(function() {
-    res.redirect('/users');
+    res.redirect('users');
   })
   .catch(function(error) {
     res.locals.errors = [error];

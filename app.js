@@ -25,20 +25,34 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({ secret: 'shioris' }));
+app.enable('trust proxy');
+
+// s
+app.use(function(req, res, next) {
+    if (req.url !== req.originalUrl) {
+        req.url =  req.url.replace(/^\/+/, '');
+    }
+    next();
+});
+
+app.use(function(req, res, next) {
+    if (req.session.user) {
+        console.log('session user:' + req.session.user.id);
+        res.locals.isLogin = true;
+        res.locals.loginUser = req.session.user.id;
+        res.locals.isAdmin = (req.session.user.id === 'admin');
+    }
+    next();
+});
 
 app.use('/', routes);
 
 // auth
 app.use(function(req, res, next) {
-    if (req.session.user) {
-      console.log('session user:' + req.session.user.id);
-      res.locals.isLogin = true;
-      res.locals.loginUser = req.session.user.id;
-      res.locals.isAdmin = (req.session.user.id === 'admin');
-      next();
-    } else {
-      res.redirect('/login');
+    if (!res.locals.isLogin) {
+      res.redirect('login');
     }
+    next();
 });
 
 app.use('/users', users);
@@ -78,6 +92,10 @@ app.use(function(err, req, res, next) {
 // helper
 app.locals.title = "Shioris";
 app.locals.dateformat = require('dateformat');
+
+app.locals.urlFor = function(url) {
+  return app.get('base') + url;
+};
 
 // connect mongodb
 console.log('env:[' + app.get('env') + ']');

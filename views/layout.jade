@@ -3,19 +3,20 @@ html
   block link
     -var selected = 'home';
 
-  -var menu = { home: '/', shiori: '/bookmarks' };
+  -var menu = { home: '.', shiori: 'bookmarks' };
   if isAdmin
-    - menu.users = '/users';
+    - menu.users = 'users';
   if isLogin
-    - menu.logout = '/logout';
+    - menu.logout = 'logout';
   else
-    - menu.login = '/login';
+    - menu.login = 'login';
 
   head
     meta(charset="utf-8")
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    base(href='shioris')
     link(rel='stylesheet', href='//yui.yahooapis.com/pure/0.4.2/pure-min.css')
+    link(rel='stylesheet', href='stylesheets/style.css')
   body
     nav.pure-menu.pure-menu-open.pure-menu-horizontal
       ul

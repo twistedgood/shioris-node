@@ -16,7 +16,7 @@ router.get('/login', function(req, res) {
 router.post('/login', function(req, res) {
   if (req.param('id') === 'admin') {
     req.session.user = { id: 'admin' };
-    res.redirect('/users');
+    res.redirect('users');
   }
   Q.nmcall(User, 'findOne', {
     id: req.param('id'),
@@ -33,7 +33,7 @@ router.post('/login', function(req, res) {
   })
   .then(function(user) {
     req.session.user = user;
-    res.redirect('/bookmarks');
+    res.redirect('bookmarks');
   })
   .catch(function(error) {
     res.locals.errors = [error];
@@ -45,7 +45,7 @@ router.post('/login', function(req, res) {
 
 router.all('/logout', function(req, res) {
   req.session.user = null;
-  res.redirect('/login');
+  res.redirect('login');
 });
 
 module.exports = router;
