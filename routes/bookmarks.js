@@ -17,28 +17,25 @@ var renderList = function(req, res, param) {
 }
 
 router.get('/', function(req, res) {
-  var query = Bookmark.find({ user: req.session.user.id });
+  var query = Bookmark.find();
+  if (req.param('u')) {
+    var user = req.param('u');
+    query.where({ user: user });
+  } else {
+    query.where({ user: req.session.user.id });
+  }
+  query.sort('created_at');
   if (req.param('q')) {
     var q = req.param('q').split(' ');
     for (var i in q) {
-      console.log('#q:' + q[i]);
       query.where({ content: new RegExp(q[i], 'i') });
     }
   }
-  query.sort('created_at');
   query.exec(function(err, bookmarks) {
     res.render('bookmarks', {
       bookmarks: bookmarks
     });
   });
-});
-
-router.get('/:user', function(req, res) {
-  var param = {};
-  if (req.param('user')) {
-    param = { user: req.param('user') };
-  }
-  renderList(req, res, param);
 });
 
 router.post('/', function(req, res) {

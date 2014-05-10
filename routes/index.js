@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var config = require('config');
+
 var Q = require('q');
 var User = require('../models/User').User;
 
@@ -14,8 +16,9 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/login', function(req, res) {
-  if (req.param('id') === 'admin') {
-    req.session.user = { id: 'admin' };
+  var admin = config.admin;
+  if (req.param('id') === admin.id && req.param('password') === admin.password) {
+    req.session.user = { id: admin.id, admin: true };
     res.redirect('users');
   }
   Q.nmcall(User, 'findOne', {

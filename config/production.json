@@ -1,0 +1,7 @@
+{
+  "admin": {
+    "id": "admin",
+    "password": "minda"
+  },
+  "mongodb": "mongodb://localhost/shioris"
+}
