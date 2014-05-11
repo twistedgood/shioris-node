@@ -30,6 +30,7 @@ router.get('/', function(req, res) {
     for (var i in q) {
       query.where({ content: new RegExp(q[i], 'i') });
     }
+    res.locals.q = req.param('q');
   }
   query.exec(function(err, bookmarks) {
     res.render('bookmarks', {

@@ -14,15 +14,17 @@ block content
       li.alert-error #{error}
   h1 Shiori Listing
   form(action='bookmarks', method='get').pure-form
-    input(type='text', name='q', size='80', placeholder='')
+    input(type='text', name='q', size='60', placeholder='', value='#{q || ""}').pure-input-rounded
     input(type='submit', value='Search').pure-button
   p #{bookmarks.length} bookmark(s)
   if(bookmarks.length > 0)
-  ul
+  table
     each bookmark in bookmarks
-      li
-        a(href='#{bookmark.url}', target='_blank') #{bookmark.title}
-        div
+     tr(valign='top', height='20')
+        td
           img(src='#{"http://www.google.com/s2/favicons?domain_url=" + bookmark.url}')
+        td
+          a(href='#{bookmark.url}', target='_blank') #{bookmark.title}
+        td
           span #{bookmark.url}
           //div #{bookmark.content.replace(/ +/, ' ').substring(0, 200)}
