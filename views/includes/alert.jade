@@ -1,0 +1,7 @@
+if errors
+  ul
+  each error in errors
+    if error.msg
+      li.alert-error #{error.msg}
+    else
+      li.alert-error #{error}

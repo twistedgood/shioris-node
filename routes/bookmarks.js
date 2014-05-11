@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-var Bookmark = require('../models/Bookmark').Bookmark;
 var Q = require('q');
 var request = require('request');
 var cheerio = require('cheerio');
 var jschardet = require('jschardet');
 var Iconv = require('iconv').Iconv;
+
+var Bookmark = require('../models/Bookmark').Bookmark;
 
 var renderList = function(req, res, param) {
   Bookmark.find(param).sort('created_at').exec(function(err, bookmarks) {
@@ -40,6 +41,13 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
+  req.assert('url', 'URL is required.').notEmpty();
+  req.assert('url', 'URL is invalid.').isURL();
+  var errors = req.validationErrors();
+  if (errors) {
+    res.locals.errors = errors;
+    renderList(req, res, { user: req.session.user.id });
+  }
   Q.nmcall(Bookmark, 'findOne', {
     url: req.param('url'),
     user: req.session.user.id

@@ -22,7 +22,8 @@
     "iconv": "^2.1.0",
     "cheerio": "^0.15.0",
     "request": "^2.34.0",
-    "config": "^0.4.35"
+    "config": "^0.4.35",
+    "express-validator": "^2.1.2"
   },
   "devDependencies": {
     "node-dev": "^2.3.0",

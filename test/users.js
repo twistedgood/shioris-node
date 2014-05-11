@@ -42,7 +42,7 @@ describe('user test', function() {
     it('should add a user', function(done) {
       var req = request(app).post('/users');
       req.cookies = Cookies;
-      req.send({ id: 'hoge', name: 'hoge' })
+      req.send({ id: 'hoge', password: 'hogehoge' })
       .expect(302)
       .expect(/Redirecting to users/)
       .end(done); 

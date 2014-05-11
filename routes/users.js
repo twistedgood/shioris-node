@@ -9,6 +9,18 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
+  req.sanitize('id').trim();
+  req.assert('id', 'ID is required.').notEmpty();
+  req.assert('id', 'ID is invalid.').matches(/^[0-9a-zA-Z_]+$/);
+  req.sanitize('password').trim();
+  req.assert('password', 'Password is required.').notEmpty();
+  req.assert('password', 'Password is invalid.').isLength(6).matches(/^[\d\w]+$/);
+  var errors = req.validationErrors();
+  if (errors) {
+    res.locals.errors = errors;
+    renderList(req, res, { user: req.session.user.id });
+    return;
+  }
   Q.nmcall(User, 'findOne', {id: req.param('id') })
   .then(function(user) {
     var deferred = Q.defer();

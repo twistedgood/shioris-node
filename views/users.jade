@@ -1,15 +1,12 @@
 extends layout
 
 block content
-  if errors
-    ul
-    each error in errors
-      li #{error}
   h1 Add User
   form(action='/users', method='post').pure-form.pure-form-stacked
     input(type='text', name='id', placeholder='ID')
     input(type='text', name='password', placeholder='Password')
     input(type='submit', value='Register').pure-button
+  include includes/alert
   h1 User Listing
   p #{users.length} user(s)
   table.pure-table

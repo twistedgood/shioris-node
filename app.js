@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('cookie-session');
 var mongoose = require('mongoose');
 var config = require('config');
+var validator = require('express-validator');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(validator());
 app.use(session({ secret: 'shioris' }));
 app.enable('trust proxy');
 
@@ -97,6 +99,7 @@ app.use(function(err, req, res, next) {
 app.locals.title = "Shioris";
 app.locals.config = config;
 app.locals.dateformat = require('dateformat');
+  console.log('#app.locals.title@app:' + app.locals.title);
 
 // connect mongodb
 console.log('env:[' + app.get('env') + ']');

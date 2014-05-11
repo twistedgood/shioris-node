@@ -8,10 +8,7 @@ block content
   form(action='bookmarks', method='post').pure-form
     input(type='text', name='url', size='80', placeholder='URL')
     input(type='submit', value='Shiori').pure-button
-  if errors
-    ul
-    each error in errors
-      li.alert-error #{error}
+  include includes/alert
   h1 Shiori Listing
   form(action='bookmarks', method='get').pure-form
     input(type='text', name='q', size='60', placeholder='', value='#{q || ""}').pure-input-rounded
