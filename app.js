@@ -30,7 +30,7 @@ app.use(validator());
 app.use(session({ secret: 'shioris' }));
 app.enable('trust proxy');
 
-// s
+// 
 app.use(function(req, res, next) {
   if (req.url !== req.originalUrl) {
     req.url =  req.url.replace(/^\/+/, '');

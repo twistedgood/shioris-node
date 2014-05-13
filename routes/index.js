@@ -20,28 +20,22 @@ router.post('/login', function(req, res) {
   if (req.param('id') === admin.id && req.param('password') === admin.password) {
     req.session.user = { id: admin.id, admin: true };
     res.redirect('users');
+    return;
   }
-  Q.nmcall(User, 'findOne', {
+  Q(User.findOne({
     id: req.param('id'),
     password: req.param('password')
-  })
+  }).exec())
   .then(function(user) {
-    var deferred = Q.defer();
     if (!user) {
-      deferred.reject('Aunthenticatin failed.');
-    } else {
-      deferred.resolve(user);
+      throw new Error('Authentication failed.');
     }
-    return deferred.promise;
-  })
-  .then(function(user) {
     req.session.user = user;
     res.redirect('bookmarks');
   })
   .catch(function(error) {
-    res.locals.errors = [error];
+    res.locals.errors = (Array.isArray(error)) ? error : [error];
     res.render('login');
-    return;
   })
   .done();
 });

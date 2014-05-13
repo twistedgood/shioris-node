@@ -9,6 +9,7 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
+  Q.defer();
   req.sanitize('id').trim();
   req.assert('id', 'ID is required.').notEmpty();
   req.assert('id', 'ID is invalid.').matches(/^[0-9a-zA-Z_]+$/);
@@ -21,29 +22,26 @@ router.post('/', function(req, res) {
     renderList(req, res, { user: req.session.user.id });
     return;
   }
-  Q.nmcall(User, 'findOne', {id: req.param('id') })
+  Q(User.findOne({
+    id: req.param('id')
+  }).exec())
   .then(function(user) {
-    var deferred = Q.defer();
     if (user) {
-      deferred.reject('Duplicated id. Please enter other.');
-    } else {
-      deferred.resolve();
+      throw new Error('Duplicated id. Please enter other.');
     }
-    return deferred.promise;
   })
   .then(function() {
-    Q.nmcall(User, 'create', {
+    return Q(User.create({
       id: req.param('id'),
       password: req.param('password')
-    });
+    }))
   })
   .then(function() {
     res.redirect('users');
   })
   .catch(function(error) {
-    res.locals.errors = [error];
+    res.locals.errors = (Array.isArray(error)) ? error : [error];
     renderList(req, res);
-    return;
   })
   .done();
 });
