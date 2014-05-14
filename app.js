@@ -45,7 +45,7 @@ app.use(function(req, res, next) {
     res.locals.isLogin = true;
     res.locals.loginUser = req.session.user.id;
     if (req.session.user.admin) {
-      res.locals.isAdmin = (req.session.user.id === 'admin');
+      res.locals.isAdmin = true;
     }
   }
   next();

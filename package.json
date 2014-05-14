@@ -4,7 +4,12 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "NODE_ENV=test mocha"
+    "test": "make test"
+  },
+  "config": {
+    "blanket": {
+      "pattern": [ "app.js", "routes", "models" ]
+    }
   },
   "dependencies": {
     "express": "~4.0.0",
@@ -28,6 +33,7 @@
   "devDependencies": {
     "node-dev": "^2.3.0",
     "mocha": "^1.18.2",
-    "supertest": "^0.12.0"
+    "supertest": "^0.12.0",
+    "blanket": "^1.1.6"
   }
 }
