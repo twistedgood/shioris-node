@@ -2,7 +2,7 @@ var request = require('supertest'),
   assert = require('assert'),
   app = require('../app');
 
-var User = require('../models/User').User;
+var User = require('models/User').User;
 
 var Cookies;
 

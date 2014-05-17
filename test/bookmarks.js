@@ -3,8 +3,8 @@ var request = require('supertest'),
   app = require('../app');
 
 var Q = require('q');
-var User = require('../models/User').User;
-var Bookmark = require('../models/Bookmark').Bookmark;
+var User = require('models/User').User;
+var Bookmark = require('models/Bookmark').Bookmark;
 
 var Cookies;
 
@@ -25,12 +25,6 @@ describe('bookmark test', function() {
       return Q.nmcall(req, 'end');
     })
     .then(function(res) {
-      /*
-      Object.keys(res.headers).forEach(function(key) {
-        var val = res.headers[key];
-        console.log('#' + key + ':' + val);
-      });
-      */
       Cookies = res.headers['set-cookie'].map(function(r){
         return r.replace("; path=/; httponly","")
       }).join("; ");

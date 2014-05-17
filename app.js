@@ -9,9 +9,9 @@ var mongoose = require('mongoose');
 var config = require('config');
 var validator = require('express-validator');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var bookmarks = require('./routes/bookmarks');
+var routes = require('routes/index');
+var users = require('routes/users');
+var bookmarks = require('routes/bookmarks');
 
 var app = express();
 

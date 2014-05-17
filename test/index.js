@@ -3,7 +3,7 @@ var request = require('supertest'),
   app = require('../app');
 
 var Q = require('q');
-var User = require('../models/User').User;
+var User = require('models/User').User;
 
 describe('index test', function() {
 
